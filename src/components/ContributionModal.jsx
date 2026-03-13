@@ -207,7 +207,14 @@ const ContributionModal = ({ isOpen, onClose }) => {
                         </div>
 
                         <button
-                            onClick={() => setStep(4)}
+                            onClick={() => {
+                                setStep(4)
+                                toast.success('Submission received! Admin will verify soon.', { icon: '📨', duration: 4000 })
+                                sendEmail({
+                                    to: 'hachstacks@gmail.com',
+                                    ...templates.withdrawalRequest(profile?.full_name || 'Family Member', formData.amount, formData.reason)
+                                })
+                            }}
                             disabled={!formData.receipt}
                             style={{ width: '100%', padding: '1rem', background: 'var(--primary)', borderRadius: 'var(--radius-md)', fontWeight: '700' }}
                         >
@@ -224,7 +231,10 @@ const ContributionModal = ({ isOpen, onClose }) => {
                             <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Redirecting to secure payment portal...</p>
                         </div>
                         <button
-                            onClick={() => setStep(4)}
+                            onClick={() => {
+                                setStep(4)
+                                toast.success('Awesome! Contribution recorded.', { icon: '💎', duration: 4000 })
+                            }}
                             style={{ width: '100%', padding: '1rem', background: 'var(--primary)', borderRadius: 'var(--radius-md)', fontWeight: '700' }}
                         >
                             Authorize Payment (Mock)
@@ -238,18 +248,6 @@ const ContributionModal = ({ isOpen, onClose }) => {
                         animate={{ scale: 1, opacity: 1 }}
                         style={{ textAlign: 'center', padding: '2rem 0' }}
                     >
-                        {useEffect(() => {
-                            if (method === 'manual') {
-                                toast.success('Submission received! Admin will verify soon.', { icon: '📨', duration: 4000 })
-                                // Simulate sending email to admin
-                                sendEmail({
-                                    to: 'hachstacks@gmail.com',
-                                    ...templates.withdrawalRequest(profile?.full_name || 'Family Member', formData.amount, formData.reason)
-                                })
-                            } else {
-                                toast.success('Awesome! Contribution recorded.', { icon: '💎', duration: 4000 })
-                            }
-                        }, [])}
                         <CheckCircle size={64} color="var(--success)" style={{ marginBottom: '1.5rem' }} />
                         <h2 style={{ marginBottom: '0.5rem' }}>{method === 'manual' ? 'Submitted!' : 'Payment Success!'}</h2>
                         <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>

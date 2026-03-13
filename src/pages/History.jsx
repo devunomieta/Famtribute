@@ -46,99 +46,167 @@ const History = () => {
     }
 
     return (
-        <div className="animate-fade-in">
-            <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Transaction History</h2>
+        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="flex-between">
+                <div>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.04em' }}>LEDGER<span style={{ color: 'var(--primary)' }}>.</span></h2>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginTop: '4px' }}>Complete transactional history</p>
+                </div>
                 <button
                     onClick={downloadCSV}
-                    className="flex-center"
-                    style={{ gap: '6px', fontSize: '0.875rem', padding: '0.5rem 0.75rem', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
+                    className="btn-outline"
+                    style={{ fontSize: '0.75rem', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
-                    <Download size={16} />
-                    Export
+                    <Download size={14} />
+                    EXPORT CSV
                 </button>
             </div>
 
             {/* Search & Filter */}
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <div style={{ flex: 1, position: 'relative' }}>
-                    <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                    <Search size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                     <input
                         type="text"
-                        placeholder="Search contributor or reason..."
-                        style={{ paddingLeft: '2.5rem' }}
+                        placeholder="Search records..."
+                        style={{ paddingLeft: '3rem' }}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
                 <div style={{ position: 'relative' }}>
                     <select
-                        style={{ width: 'auto', paddingRight: '2rem', appearance: 'none' }}
+                        style={{ width: 'auto', paddingRight: '2.5rem', appearance: 'none', fontWeight: '600' }}
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
                     >
-                        <option value="all">All</option>
-                        <option value="contribution">In</option>
-                        <option value="withdrawal">Out</option>
+                        <option value="all">ALL TYPES</option>
+                        <option value="contribution">CREDITS</option>
+                        <option value="withdrawal">DEBITS</option>
                     </select>
-                    <ChevronDown size={16} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                    <ChevronDown size={14} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
                 </div>
             </div>
 
-            {/* List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {/* Desktop View Table */}
+            <div className="desktop-only">
+                <table className="desktop-table">
+                    <thead>
+                        <tr>
+                            <th style={{ width: '200px' }}>TYPE</th>
+                            <th>RECIPIENT / REASON</th>
+                            <th>VALUE</th>
+                            <th>TIMESTAMP</th>
+                            <th style={{ textAlign: 'right' }}>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredTransactions.map((tx) => (
+                            <tr key={tx.id}>
+                                <td>
+                                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                                        <div style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            borderRadius: '4px',
+                                            background: 'var(--background)',
+                                            border: '1px solid var(--border)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            {tx.type === 'contribution' ? <ArrowDownLeft size={16} color="var(--success)" /> : <ArrowUpRight size={16} color="var(--error)" />}
+                                        </div>
+                                        <span style={{ fontWeight: '700', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{tx.type}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style={{ fontWeight: '700', fontSize: '0.9375rem' }}>{tx.name}</div>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{tx.reason}</div>
+                                </td>
+                                <td>
+                                    <div style={{ fontWeight: '800', fontSize: '1rem', color: tx.type === 'contribution' ? 'var(--success)' : 'var(--error)' }}>
+                                        {tx.type === 'contribution' ? '+' : '-'}₦{tx.amount.toLocaleString()}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style={{ fontSize: '0.8125rem', fontWeight: '500' }}>{tx.date}</div>
+                                </td>
+                                <td style={{ textAlign: 'right' }}>
+                                    <span style={{
+                                        padding: '4px 10px',
+                                        borderRadius: '4px',
+                                        fontSize: '0.65rem',
+                                        fontWeight: '800',
+                                        border: '1px solid var(--border)',
+                                        color: 'var(--text-muted)',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.05em'
+                                    }}>
+                                        {tx.status}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Mobile View List */}
+            <div className="mobile-only" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {filteredTransactions.map((tx) => (
                     <motion.div
                         layout
                         key={tx.id}
                         className="glass-card"
-                        style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}
+                        style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}
                     >
                         <div style={{
-                            width: '44px',
-                            height: '44px',
-                            borderRadius: '14px',
-                            background: tx.type === 'contribution' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '4px',
+                            background: 'var(--background)',
+                            border: '1px solid var(--border)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0
                         }}>
                             {tx.type === 'contribution' ? (
-                                <ArrowDownLeft size={22} color="var(--success)" />
+                                <ArrowDownLeft size={20} color="var(--success)" />
                             ) : (
-                                <ArrowUpRight size={22} color="var(--error)" />
+                                <ArrowUpRight size={20} color="var(--error)" />
                             )}
                         </div>
 
                         <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div>
-                                    <div style={{ fontWeight: '600', fontSize: '1rem' }}>{tx.name}</div>
-                                    <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '2px' }}>{tx.reason}</div>
+                                    <div style={{ fontWeight: '700', fontSize: '0.9375rem' }}>{tx.name}</div>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>{tx.reason}</div>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
                                     <div style={{
-                                        fontWeight: '700',
-                                        fontSize: '1rem',
+                                        fontWeight: '800',
+                                        fontSize: '0.9375rem',
                                         color: tx.type === 'contribution' ? 'var(--success)' : 'var(--error)'
                                     }}>
                                         {tx.type === 'contribution' ? '+' : '-'}₦{tx.amount.toLocaleString()}
                                     </div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>{tx.date}</div>
+                                    <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '2px' }}>{tx.date}</div>
                                 </div>
                             </div>
                         </div>
                     </motion.div>
                 ))}
-
-                {filteredTransactions.length === 0 && (
-                    <div style={{ padding: '3rem 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-                        <FileText size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
-                        <p>No transactions found</p>
-                    </div>
-                )}
             </div>
+
+            {filteredTransactions.length === 0 && (
+                <div style={{ padding: '5rem 0', textAlign: 'center', color: 'var(--text-muted)' }}>
+                    <FileText size={40} style={{ opacity: 0.1, marginBottom: '1.5rem' }} />
+                    <p style={{ fontWeight: '600', fontSize: '0.875rem' }}>No transaction records found</p>
+                </div>
+            )}
         </div>
     )
 }

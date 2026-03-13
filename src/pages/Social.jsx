@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageSquare, Heart, Share2, Send, Image as ImageIcon, MoreHorizontal } from 'lucide-react'
+import { MessageSquare, Heart, Share2, Send, Image as ImageIcon, MoreHorizontal, User } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const Social = () => {
@@ -13,7 +13,7 @@ const Social = () => {
             id: 1,
             author: 'Ayo Johnson',
             content: 'Just finished the roof repairs! Thanks everyone for the contributions. Special thanks to Tobi for coordinating.',
-            image: 'https://images.unsplash.com/photo-1632759145351-1d592919f507?auto=format&fit=crop&q=80&w=400',
+            image: 'https://images.unsplash.com/photo-1632759145351-1d592919f507?auto=format&fit=crop&q=80&w=800',
             likes: 12,
             comments: 3,
             date: '2 hours ago'
@@ -22,7 +22,7 @@ const Social = () => {
             id: 2,
             author: 'Mama Tolu',
             content: 'Check out these flowers from the garden! Looking forward to seeing everyone at the reunion.',
-            image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=400',
+            image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=800',
             likes: 24,
             comments: 5,
             date: '5 hours ago'
@@ -36,152 +36,174 @@ const Social = () => {
     ]
 
     return (
-        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 12rem)' }}>
+        <div className="animate-fade-in constrained-container" style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '2rem' }}>
+
+            <div className="flex-between">
+                <div>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.04em' }}>SOCIETY<span style={{ color: 'var(--primary)' }}>.</span></h2>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginTop: '4px' }}>Family feed and real-time communication</p>
+                </div>
+            </div>
+
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '2px' }}>
                 <button
                     onClick={() => setActiveTab('posts')}
                     style={{
-                        padding: '0.5rem 1rem',
-                        fontWeight: '600',
-                        color: activeTab === 'posts' ? 'var(--primary)' : 'var(--text-muted)',
-                        position: 'relative'
+                        padding: '0.75rem 1.25rem',
+                        fontWeight: '700',
+                        fontSize: '0.75rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: activeTab === 'posts' ? 'var(--text)' : 'var(--text-muted)',
+                        position: 'relative',
+                        transition: 'color 0.2s'
                     }}
                 >
                     Updates
-                    {activeTab === 'posts' && <motion.div layoutId="social-tab" style={{ position: 'absolute', bottom: '-1px', left: 0, right: 0, height: '2px', background: 'var(--primary)' }} />}
+                    {activeTab === 'posts' && <motion.div layoutId="social-tab-active" style={{ position: 'absolute', bottom: '-2px', left: 0, right: 0, height: '2px', background: 'var(--primary)' }} />}
                 </button>
                 <button
                     onClick={() => setActiveTab('chat')}
                     style={{
-                        padding: '0.5rem 1rem',
-                        fontWeight: '600',
-                        color: activeTab === 'chat' ? 'var(--primary)' : 'var(--text-muted)',
-                        position: 'relative'
+                        padding: '0.75rem 1.25rem',
+                        fontWeight: '700',
+                        fontSize: '0.75rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: activeTab === 'chat' ? 'var(--text)' : 'var(--text-muted)',
+                        position: 'relative',
+                        transition: 'color 0.2s'
                     }}
                 >
                     Family Chat
-                    {activeTab === 'chat' && <motion.div layoutId="social-tab" style={{ position: 'absolute', bottom: '-1px', left: 0, right: 0, height: '2px', background: 'var(--primary)' }} />}
+                    {activeTab === 'chat' && <motion.div layoutId="social-tab-active" style={{ position: 'absolute', bottom: '-2px', left: 0, right: 0, height: '2px', background: 'var(--primary)' }} />}
                 </button>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', flex: 1 }}>
                 {activeTab === 'posts' ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                         {/* Create Post */}
-                        <div className="glass-card" style={{ padding: '1rem' }}>
-                            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary)', flexShrink: 0 }} />
+                        <div className="glass-card" style={{ padding: '1.5rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                                <div style={{ width: '40px', height: '40px', borderRadius: '4px', background: 'var(--primary)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                                    <User size={20} />
+                                </div>
                                 <textarea
-                                    placeholder="Share something with the family..."
-                                    style={{ background: 'transparent', border: 'none', padding: '0.5rem 0', resize: 'none', minHeight: '60px' }}
+                                    placeholder="Draft an update for the family..."
+                                    style={{ background: 'transparent', border: 'none', padding: '0.5rem 0', resize: 'none', minHeight: '60px', fontSize: '0.9375rem' }}
                                     value={newPost}
                                     onChange={(e) => setNewPost(e.target.value)}
                                 />
                             </div>
-                            <div className="flex-between" style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.75rem' }}>
-                                <button style={{ color: 'var(--text-muted)', display: 'flex', gap: '6px', alignItems: 'center', fontSize: '0.875rem' }}>
-                                    <ImageIcon size={18} /> Photo
+                            <div className="flex-between" style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                                <button style={{ color: 'var(--text-muted)', display: 'flex', gap: '8px', alignItems: 'center', fontSize: '0.75rem', fontWeight: '800' }}>
+                                    <ImageIcon size={16} /> ATTACH MEDIA
                                 </button>
                                 <button
                                     disabled={!newPost}
-                                    style={{ background: 'var(--primary)', color: 'white', padding: '0.5rem 1.25rem', borderRadius: 'var(--radius-md)', fontWeight: '600', fontSize: '0.875rem' }}
+                                    className="btn-primary"
+                                    style={{ padding: '0.5rem 1.5rem', fontSize: '0.8125rem', opacity: newPost ? 1 : 0.5 }}
                                 >
-                                    Post
+                                    PUBLISH
                                 </button>
                             </div>
                         </div>
 
                         {/* Posts List */}
                         {posts.map(post => (
-                            <div key={post.id} className="glass-card" style={{ padding: '0' }}>
-                                <div style={{ padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent)' }} />
+                            <div key={post.id} className="glass-card" style={{ padding: '0', overflow: 'hidden' }}>
+                                <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <User size={18} color="var(--primary)" />
+                                        </div>
                                         <div>
-                                            <div style={{ fontWeight: '600', fontSize: '0.925rem' }}>{post.author}</div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{post.date}</div>
+                                            <div style={{ fontWeight: '700', fontSize: '0.925rem' }}>{post.author}</div>
+                                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{post.date}</div>
                                         </div>
                                     </div>
-                                    <button style={{ color: 'var(--text-muted)' }}><MoreHorizontal size={20} /></button>
+                                    <button style={{ color: 'var(--text-muted)' }}><MoreHorizontal size={18} /></button>
                                 </div>
 
-                                <div style={{ padding: '0 1rem 1rem 1rem', fontSize: '0.925rem', lineHeight: '1.6' }}>
+                                <div style={{ padding: '0 1.5rem 1.5rem 1.5rem', fontSize: '0.9375rem', lineHeight: '1.7', color: 'var(--text)' }}>
                                     {post.content}
                                 </div>
 
                                 {post.image && (
-                                    <img
-                                        src={post.image}
-                                        alt="Post attachment"
-                                        style={{ width: '100%', height: '250px', objectFit: 'cover' }}
-                                    />
+                                    <div style={{ padding: '0 1.5rem 1.5rem 1.5rem' }}>
+                                        <img
+                                            src={post.image}
+                                            alt="Update asset"
+                                            style={{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}
+                                        />
+                                    </div>
                                 )}
 
-                                <div className="flex-between" style={{ padding: '0.75rem 1rem', borderTop: '1px solid var(--glass-border)' }}>
+                                <div className="flex-between" style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
                                     <div style={{ display: 'flex', gap: '1.5rem' }}>
-                                        <button style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                                            <Heart size={18} /> {post.likes}
+                                        <button style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '700' }}>
+                                            <Heart size={16} /> {post.likes}
                                         </button>
-                                        <button style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                                            <MessageSquare size={18} /> {post.comments}
+                                        <button style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '700' }}>
+                                            <MessageSquare size={16} /> {post.comments}
                                         </button>
                                     </div>
-                                    <button style={{ color: 'var(--text-muted)' }}><Share2 size={18} /></button>
+                                    <button style={{ color: 'var(--text-muted)' }}><Share2 size={16} /></button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
                     /* Chat Interface */
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: '0.5rem' }}>
                         {chatMessages.map(msg => (
                             <div
                                 key={msg.id}
                                 style={{
                                     alignSelf: msg.self ? 'flex-end' : 'flex-start',
-                                    maxWidth: '80%',
+                                    maxWidth: '85%',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: msg.self ? 'flex-end' : 'flex-start',
-                                    gap: '4px'
+                                    gap: '6px'
                                 }}
                             >
-                                {!msg.self && <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '600' }}>{msg.user}</span>}
+                                {!msg.self && <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{msg.user}</span>}
                                 <div style={{
-                                    padding: '10px 14px',
-                                    borderRadius: msg.self ? '18px 18px 2px 18px' : '18px 18px 18px 2px',
+                                    padding: '12px 16px',
+                                    borderRadius: msg.self ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
                                     background: msg.self ? 'var(--primary)' : 'var(--surface)',
-                                    fontSize: '0.925rem',
-                                    boxShadow: 'var(--shadow-sm)'
+                                    color: msg.self ? 'white' : 'var(--text)',
+                                    fontSize: '0.9375rem',
+                                    border: msg.self ? 'none' : '1px solid var(--border)',
+                                    lineHeight: '1.5'
                                 }}>
                                     {msg.text}
                                 </div>
-                                <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{msg.time}</span>
+                                <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '500' }}>{msg.time}</span>
                             </div>
                         ))}
                     </div>
                 )}
             </div>
 
-            {/* Chat Input (only in chat mode) */}
+            {/* Chat Input */}
             {activeTab === 'chat' && (
                 <div style={{ padding: '1rem 0', display: 'flex', gap: '0.75rem' }}>
-                    <input
-                        type="text"
-                        placeholder="Type a message..."
-                        style={{ padding: '0.875rem 1.25rem', background: 'var(--surface)' }}
-                    />
-                    <button style={{
-                        background: 'var(--primary)',
-                        width: '48px',
-                        height: '48px',
+                    <div style={{ flex: 1, position: 'relative' }}>
+                        <input
+                            type="text"
+                            placeholder="Type a message to the family..."
+                            style={{ padding: '1rem 1.5rem', background: 'var(--surface)' }}
+                        />
+                    </div>
+                    <button className="btn-primary" style={{
+                        width: '52px',
+                        height: '52px',
                         borderRadius: 'var(--radius-md)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        flexShrink: 0
+                        padding: '0'
                     }}>
                         <Send size={20} />
                     </button>

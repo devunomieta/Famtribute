@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Target, TrendingUp, Calendar, Plus, ChevronRight, AlertCircle, FileText } from 'lucide-react'
+import { Target, TrendingUp, Calendar, Plus, ChevronRight, AlertCircle, FileText, Info } from 'lucide-react'
 
 const Goals = () => {
     const [goals, setGoals] = useState([
@@ -38,66 +38,70 @@ const Goals = () => {
     }
 
     return (
-        <div className="animate-fade-in">
-            <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Family Goals</h2>
-                <button className="flex-center" style={{ gap: '6px', fontSize: '0.875rem', padding: '0.5rem 0.75rem', background: 'var(--primary)', borderRadius: 'var(--radius-md)', fontWeight: '600' }}>
-                    <Plus size={18} />
-                    New Goal
+        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+            <div className="flex-between">
+                <div>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.04em' }}>FAMILY GOALS<span style={{ color: 'var(--primary)' }}>.</span></h2>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginTop: '4px' }}>Strategic financial targets and progress</p>
+                </div>
+                <button className="btn-primary" style={{ padding: '0.625rem 1.25rem', fontSize: '0.8125rem' }}>
+                    <Plus size={16} /> NEW GOAL
                 </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div className="goals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
                 {goals.map(goal => {
                     const progress = calculateProgress(goal.current, goal.target)
                     return (
                         <motion.div
                             key={goal.id}
                             className="glass-card"
-                            style={{ padding: '1.25rem' }}
-                            whileHover={{ scale: 1.01 }}
+                            style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}
+                            whileHover={{ borderColor: 'var(--primary)' }}
                         >
-                            <div className="flex-between" style={{ marginBottom: '1rem' }}>
-                                <span style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{goal.category}</span>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                            <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'var(--background)', padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--border)' }}>{goal.category}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>
                                     <Calendar size={14} />
                                     {goal.deadline}
                                 </div>
                             </div>
 
-                            <h3 style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>{goal.title}</h3>
-                            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>{goal.title}</h3>
+                            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '2rem', lineHeight: '1.6' }}>
                                 {goal.description}
                             </p>
 
-                            <div style={{ marginBottom: '0.75rem' }}>
-                                <div className="flex-between" style={{ marginBottom: '0.5rem' }}>
-                                    <span style={{ fontSize: '0.875rem', fontWeight: '700' }}>₦ {goal.current.toLocaleString()}</span>
-                                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Target: ₦ {goal.target.toLocaleString()}</span>
+                            <div style={{ marginTop: 'auto' }}>
+                                <div className="flex-between" style={{ marginBottom: '0.75rem' }}>
+                                    <span style={{ fontSize: '1.125rem', fontWeight: '800' }}>₦{goal.current.toLocaleString()}</span>
+                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>OF ₦{goal.target.toLocaleString()}</span>
                                 </div>
-                                <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                                <div style={{ height: '6px', background: 'var(--background)', borderRadius: '3px', overflow: 'hidden', border: '1px solid var(--border)' }}>
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 1, ease: 'easeOut' }}
                                         style={{
                                             height: '100%',
-                                            background: progress === 100 ? 'var(--success)' : 'linear-gradient(to right, var(--primary), var(--accent))',
-                                            borderRadius: '4px'
+                                            background: progress === 100 ? 'var(--success)' : 'var(--primary)',
                                         }}
                                     />
                                 </div>
-                                <div style={{ textAlign: 'right', marginTop: '4px', fontSize: '0.75rem', fontWeight: '600', color: progress === 100 ? 'var(--success)' : 'var(--text-muted)' }}>
-                                    {progress}% Funded
+                                <div className="flex-between" style={{ marginTop: '0.75rem' }}>
+                                    <span style={{ fontSize: '0.7rem', fontWeight: '800', color: progress === 100 ? 'var(--success)' : 'var(--primary)', textTransform: 'uppercase' }}>
+                                        {progress}% FUNDED
+                                    </span>
+                                    <TrendingUp size={14} color={progress > 50 ? 'var(--primary)' : 'var(--text-muted)'} />
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
-                                <button style={{ flex: 1, padding: '0.625rem', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-md)', fontSize: '0.8125rem', fontWeight: '600', border: '1px solid var(--glass-border)' }}>
-                                    Contribute
+                            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '2rem' }}>
+                                <button className="btn-outline" style={{ flex: 1, padding: '0.75rem', fontSize: '0.75rem', fontWeight: '800' }}>
+                                    CONTRIBUTE
                                 </button>
-                                <button style={{ flex: 1, padding: '0.625rem', background: 'rgba(239, 68, 68, 0.05)', color: 'var(--error)', borderRadius: 'var(--radius-md)', fontSize: '0.8125rem', fontWeight: '600', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
-                                    Request Withdrawal
+                                <button className="btn-outline" style={{ flex: 1, padding: '0.75rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--error)' }}>
+                                    WITHDRAW
                                 </button>
                             </div>
                         </motion.div>
@@ -105,15 +109,12 @@ const Goals = () => {
                 })}
             </div>
 
-            {/* Withdrawal Logic Summary */}
-            <div className="glass-card" style={{ marginTop: '2rem', background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <Info size={20} color="var(--warning)" style={{ flexShrink: 0 }} />
-                    <div>
-                        <h4 style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--warning)', marginBottom: '0.25rem' }}>Note on Withdrawals</h4>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
-                            All withdrawal requests must state a clear cause and are subject to family approval (One member, one vote). Admins will verify the final payout.
-                        </p>
+            {/* Withdrawal Note */}
+            <div className="glass-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                    <Info size={18} color="var(--primary)" style={{ marginTop: '2px' }} />
+                    <div style={{ fontSize: '0.8125rem', lineHeight: '1.6', color: 'var(--text-muted)' }}>
+                        <strong style={{ color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Governance Note:</strong> All financial movements within family goals are subject to the democratic voting system. One member, one vote. Final execution is authorized by the Superadmin.
                     </div>
                 </div>
             </div>
