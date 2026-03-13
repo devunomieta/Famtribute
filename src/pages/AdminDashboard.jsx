@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import { toast } from 'react-hot-toast'
 import { Users, CheckCircle, XCircle, Clock, ShieldCheck, UserPlus, Eye, Download } from 'lucide-react'
 
 const AdminDashboard = () => {
@@ -82,13 +83,23 @@ const AdminDashboard = () => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '0.75rem' }}>
-                                    <button className="flex-center" style={{ flex: 1, gap: '6px', padding: '0.625rem', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-md)', fontSize: '0.8125rem', fontWeight: '600', border: '1px solid var(--glass-border)' }}>
+                                    <button
+                                        onClick={() => toast('Viewing receipt...', { icon: '📄' })}
+                                        className="flex-center"
+                                        style={{ flex: 1, gap: '6px', padding: '0.625rem', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-md)', fontSize: '0.8125rem', fontWeight: '600', border: '1px solid var(--glass-border)' }}
+                                    >
                                         <Eye size={16} /> View Receipt
                                     </button>
-                                    <button style={{ padding: '0.625rem', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                                    <button
+                                        onClick={() => toast.success('Payment confirmed!')}
+                                        style={{ padding: '0.625rem', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(16, 185, 129, 0.2)' }}
+                                    >
                                         <CheckCircle size={18} />
                                     </button>
-                                    <button style={{ padding: '0.625rem', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                                    <button
+                                        onClick={() => toast.error('Payment rejected!')}
+                                        style={{ padding: '0.625rem', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(239, 68, 68, 0.2)' }}
+                                    >
                                         <XCircle size={18} />
                                     </button>
                                 </div>

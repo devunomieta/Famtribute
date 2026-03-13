@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import { toast } from 'react-hot-toast'
 import { LogIn, UserPlus, Mail, Lock, User, Calendar, ArrowRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
@@ -33,6 +34,7 @@ const Login = () => {
                     password: formData.password,
                 })
                 if (authError) throw authError
+                toast.success('Welcome back!')
                 navigate('/dashboard')
             } else {
                 const { error: signUpError } = await supabase.auth.signUp({
@@ -42,14 +44,16 @@ const Login = () => {
                         data: {
                             full_name: formData.fullName,
                             birthday: formData.birthday,
-                        }
+                        },
+                        redirectTo: `${window.location.origin}/dashboard`
                     }
                 })
                 if (signUpError) throw signUpError
-                alert('Verification email sent! Please check your inbox.')
+                toast.success('Verification email sent! Please check your inbox.', { duration: 5000 })
                 setIsLogin(true)
             }
         } catch (err) {
+            toast.error(err.message)
             setError(err.message)
         } finally {
             setLoading(false)
